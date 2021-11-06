@@ -1,0 +1,30 @@
+{
+  "name": "rtv_phone_side",
+  "version": "1.0.0",
+  "description": "PhoneSide",
+  "main": "script.js",
+ 
+  "scripts": {
+    "lite": "lite-server",
+    "scss": "node-sass -o css/ css/",
+    "start": "npm run lite",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lisanderlee/rtv_phone.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lisanderlee/rtv_phone/issues"
+  },
+  "homepage": "https://github.com/lisanderlee/rtv_phone#readme",
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  },
+  "dependencies": {
+    "type": "module",
+    "firebase": "^9.3.0"
+  }
+}

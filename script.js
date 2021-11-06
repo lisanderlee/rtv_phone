@@ -1,8 +1,24 @@
-var px = 50; // Position x and y
-var py = 50;
-var vx = 0.0; // Velocity x and y
-var vy = 0.0;
-var updateRate = 1/60; // Sensor refresh rate
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.3.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.3.0/firebase-analytics.js";
+import { getFirestore, collection, addDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.3.0/firebase-firestore.js";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+
+const firebaseApp = initializeApp({
+  apiKey: "AIzaSyBfAignBehr8S6uJWitkN4fwvcg_DvFWUo",
+  authDomain: "rtv-v1.firebaseapp.com",
+  databaseURL: "https://rtv-v1-default-rtdb.firebaseio.com",
+  projectId: "rtv-v1",
+  storageBucket: "rtv-v1.appspot.com",
+  messagingSenderId: "654344743959",
+  appId: "1:654344743959:web:ca32854ba0702e1289c052",
+  measurementId: "G-4PDZ4PZPKB"  
+});
+  
+const db = getFirestore();
+const rotationRef = doc(db, "rotation", "position");
 
 function getAccel(){
     DeviceMotionEvent.requestPermission().then(response => {
@@ -11,32 +27,12 @@ function getAccel(){
            // in the alpha-beta-gamma axes (units in degrees)
             window.addEventListener('deviceorientation',(event) => {
                 // Expose each orientation angle in a more readable way
-                rotation_degrees = event.alpha;
-                frontToBack_degrees = event.beta;
-                leftToRight_degrees = event.gamma;
-                
-                // Update velocity according to how tilted the phone is
-                // Since phones are narrower than they are long, double the increase to the x velocity
-                vx = vx + leftToRight_degrees * updateRate*2; 
-                vy = vy + frontToBack_degrees * updateRate;
-                
-                // Update position and clip it to bounds
-                px = px + vx*.5;
-                if (px > 98 || px < 0){ 
-                    px = Math.max(0, Math.min(98, px)) // Clip px between 0-98
-                    vx = 0;
-                }
-
-                py = py + vy*.5;
-                if (py > 98 || py < 0){
-                    py = Math.max(0, Math.min(98, py)) // Clip py between 0-98
-                    vy = 0;
-                }
-                
-                dot = document.getElementsByClassName("indicatorDot")[0]
-                dot.setAttribute('style', "left:" + (px) + "%;" +
-                                              "top:" + (py) + "%;");
-                
+                rotation_degrees = Math.round(event.alpha);
+                updateDoc(rotationRef, {
+                  angle: rotation_degrees
+                });
+                  
+  
             });
         }
     });
